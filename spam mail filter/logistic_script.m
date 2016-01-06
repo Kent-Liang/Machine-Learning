@@ -1,0 +1,87 @@
+load('a3spam.mat');
+alphas = 3:0.005:3.5;
+num_alphas = size(alphas, 2);
+num_tests = size(labels_test,1);
+
+result = zeros(1, num_alphas);
+train_data = [ones(1, size(data_train, 1)); data_train'];
+test_data = [ones(1, size(data_test, 1)); data_test'];
+
+for i=1:num_alphas
+     w = logisticReg(train_data, labels_train', alphas(i));
+     size(w)
+     error = 0;
+     sol = logistic(test_data, w);
+     for j = 1:num_tests
+         if round(sol(j)) ~= labels_test(j)
+             error = error + 1;
+         end
+     end
+     result(1,i) = error/num_tests;
+end
+figure;
+plot(alphas, result, 'r-*');
+title('Logistic Regression');
+xlabel('Alpha');
+ylabel('Percentage of Error');
+
+% LR_ham = 
+% 
+%     'exe/zip/gif/jpg'
+%     'grad'
+%     'course'
+%     'pjf'
+%     'planning'
+%     'subject_CAPS'
+%     'finerty'
+%     'machine'
+%     'lazanik'
+%     'thanks'
+% 
+% 
+% LR_ham_weight =
+% 
+%    -3.4667
+%    -3.0232
+%    -2.1088
+%    -2.0849
+%    -1.9900
+%    -1.8892
+%    -1.8428
+%    -1.7327
+%    -1.6397
+%    -1.5857
+% 
+% 
+% LR_spam = 
+%     '3_parts'
+%     'tonight'
+%     'work'
+%     'discuss'
+%     'reply'
+%     'est'
+%     'know'
+%     'dinner'
+%     'rate'
+%     'sara'
+% 
+% 
+% LR_spam_weight =
+% 
+%     1.3486
+%     1.3868
+%     1.4034
+%     1.5746
+%     1.6719
+%     1.7358
+%     1.7391
+%     1.7852
+%     1.7868
+%     2.5665
+
+w = logisticReg(train_data, labels_train', 3.25);
+[b ind] = sort(w);
+LR_ham = feature_names(ind(1:10))
+LR_ham_weight = w(ind(1:10))
+LR_spam = feature_names(ind(end - 9 : end))
+LR_spam_weight = w(ind(end-9 : end))
